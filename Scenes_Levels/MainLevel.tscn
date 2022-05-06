@@ -1,0 +1,104 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Prefabs/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Road.png" type="Texture" id=2]
+[ext_resource path="res://Assets/MainBGDM.png" type="Texture" id=3]
+[ext_resource path="res://Scenes_Levels/MainLevel.cs" type="Script" id=4]
+[ext_resource path="res://Assets/Cloud.png" type="Texture" id=5]
+
+[sub_resource type="Theme" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+[sub_resource type="RectangleShape2D" id=2]
+
+[node name="MainLevel" type="Node2D"]
+script = ExtResource( 4 )
+enemyCount = 4
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 556, 257 )
+texture = ExtResource( 3 )
+
+[node name="Label" type="RichTextLabel" parent="Background"]
+margin_left = -536.0
+margin_top = -242.0
+margin_right = -425.0
+margin_bottom = -218.0
+theme = SubResource( 3 )
+scroll_active = false
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 519, 517 )
+scale = Vector2( 1.96, 2.48 )
+collision_mask = 6
+_moveSpeed = 3000
+
+[node name="ShootPos" type="Position2D" parent="Player"]
+position = Vector2( 0, -8.06451 )
+
+[node name="GameEnviroment" type="Node2D" parent="."]
+
+[node name="Road" type="StaticBody2D" parent="GameEnviroment"]
+position = Vector2( 533, 599 )
+scale = Vector2( 60, 1 )
+collision_layer = 4
+collision_mask = 0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameEnviroment/Road"]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="GameEnviroment/Road"]
+position = Vector2( 3.8147e-06, -3.8147e-06 )
+scale = Vector2( 1.25, 1.25 )
+texture = ExtResource( 2 )
+
+[node name="Barrier" type="StaticBody2D" parent="GameEnviroment"]
+position = Vector2( -2, 286.831 )
+scale = Vector2( 1, 30 )
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameEnviroment/Barrier"]
+shape = SubResource( 2 )
+
+[node name="Barrier2" type="StaticBody2D" parent="GameEnviroment"]
+position = Vector2( 1027.35, 286.831 )
+scale = Vector2( 1, 30 )
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameEnviroment/Barrier2"]
+shape = SubResource( 2 )
+
+[node name="Cloud" type="Sprite" parent="GameEnviroment"]
+position = Vector2( 208, 37 )
+scale = Vector2( 1.57813, 1.04688 )
+texture = ExtResource( 5 )
+
+[node name="Cloud1" type="Sprite" parent="GameEnviroment"]
+position = Vector2( 348, 82 )
+scale = Vector2( 1.57813, 1.04688 )
+texture = ExtResource( 5 )
+
+[node name="Cloud2" type="Sprite" parent="GameEnviroment"]
+position = Vector2( 663, 55 )
+scale = Vector2( 1.57813, 1.04688 )
+texture = ExtResource( 5 )
+
+[node name="Cloud3" type="Sprite" parent="GameEnviroment"]
+position = Vector2( 958, 21 )
+scale = Vector2( 1.57813, 1.04688 )
+texture = ExtResource( 5 )
+
+[node name="EnemieSpawn" type="Position2D" parent="."]
+position = Vector2( 971, 128 )
+
+[node name="Timer" type="Timer" parent="EnemieSpawn"]
+wait_time = 3.0
+autostart = true
+
+[connection signal="timeout" from="EnemieSpawn/Timer" to="." method="_on_Timer_timeout"]
