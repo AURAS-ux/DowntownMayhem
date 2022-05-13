@@ -18,7 +18,7 @@ public class Player : KinematicBody2D
 
     public override void _PhysicsProcess(float delta)
     { 
-        MoveAndSlide(ProcessInput(delta));
+        _velocity = MoveAndSlide(ProcessInput(delta));
     }
 
 

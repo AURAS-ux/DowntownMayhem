@@ -4,10 +4,9 @@ using System;
 public class Bullet : Area2D
 {
     [Export] int bulletSpeedMultiplyer = 20;
-    private Vector2 _bulletVelocity;
     public override void _Ready()
     {
-        _bulletVelocity = Vector2.Zero;    
+
     }
 
     public override void _PhysicsProcess(float delta)

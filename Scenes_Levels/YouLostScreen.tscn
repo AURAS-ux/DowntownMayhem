@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Assets/Fonts/pluschannel.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://Scripts/YouLostScreen.cs" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 101
+extra_spacing_top = 10
+extra_spacing_char = 20
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=2]
+default_font = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 52
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=4]
+default_font = SubResource( 3 )
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 1105.0
+margin_bottom = 643.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = 315.0
+margin_top = 214.0
+margin_right = 944.0
+margin_bottom = 290.0
+theme = SubResource( 2 )
+text = "You lost"
+scroll_active = false
+
+[node name="Button" type="Button" parent="."]
+margin_left = 176.0
+margin_top = 431.0
+margin_right = 369.0
+margin_bottom = 475.0
+theme = SubResource( 4 )
+text = "Retry"
+
+[node name="Button2" type="Button" parent="."]
+margin_left = 665.0
+margin_top = 431.0
+margin_right = 858.0
+margin_bottom = 475.0
+theme = SubResource( 4 )
+text = "Quit"
+
+[connection signal="pressed" from="Button" to="." method="RetryButtonPressed"]
+[connection signal="pressed" from="Button2" to="." method="QuitButtonPressed"]
