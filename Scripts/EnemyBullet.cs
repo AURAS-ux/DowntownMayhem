@@ -16,6 +16,20 @@ public class EnemyBullet : Area2D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        Translate(new Vector2(0, 20*delta));
+        Translate(new Vector2(0, 150*delta));
+    }
+
+    public void HitPlayer(Player player)
+    {
+        if (player.Name == "Player")
+        {
+            player.isHit = true;
+        }
+    }
+
+    public void HitBullet(Bullet bullet)
+    {
+        bullet.QueueFree();
+        this.QueueFree();
     }
 }

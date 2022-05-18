@@ -8,19 +8,28 @@ public class Player : KinematicBody2D
     private PackedScene _bullet;
     private Position2D _positionShooting;
     private int _reloadTime;
+    public bool isHit;
     
     public override void _Ready()
     {
         _bullet = GD.Load<PackedScene>("res://Prefabs/Bullet.tscn");
         _positionShooting = GetNode<Position2D>("/root/MainLevel/Player/ShootPos");
         _reloadTime = 0;
+        isHit = false;
     }
 
     public override void _PhysicsProcess(float delta)
     { 
         _velocity = MoveAndSlide(ProcessInput(delta));
     }
-
+    private void CheckStatus()
+    {
+        if (isHit)
+        {
+            GetTree().ChangeScene("res://Scenes_Levels/YouLostScreen.tscn");
+            isHit = false;
+        }
+    }
 
     private Vector2 ProcessInput(float delta)
     {
@@ -29,7 +38,7 @@ public class Player : KinematicBody2D
             _velocity += new Vector2(-10 * _moveSpeed * delta, 0);
         if (Input.IsActionPressed("right"))
             _velocity += new Vector2(10 * _moveSpeed * delta, 0);
-        if (Input.IsActionPressed("Shoot") && _reloadTime > 60)
+        if (Input.IsActionPressed("Shoot") && _reloadTime > 10)
         {
             Shoot();
             _reloadTime = 0;
@@ -46,12 +55,12 @@ public class Player : KinematicBody2D
         Bullet bullet = _bullet.Instance<Bullet>();
         Owner.GetParent().AddChild(bullet);
         bullet.Transform = _positionShooting.GlobalTransform;
-        bullet.Scale = new Vector2(0.85f, 2);
+        bullet.Scale = new Vector2(0.35f, 1);
         
     }
-    //  // Called every frame. 'delta' is the elapsed time since the previous frame.
-    //  public override void _Process(float delta)
-    //  {
-    //      
-    //  }
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(float delta)
+    {
+        CheckStatus();
+    }
 }

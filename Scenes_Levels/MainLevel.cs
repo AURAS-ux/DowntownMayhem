@@ -10,10 +10,19 @@ public class MainLevel : Node2D
     [Export] int enemyCount = 6;
     private int count;
     private List<Enemy> _enemies;
-    private int score;
-    public RichTextLabel scoreBoard;
-    public PackedScene youLostScene;
-    private Random randomPos;
+    private int _score;
+    public RichTextLabel _scoreBoard;
+    public PackedScene _youLostScene;
+    private Random _randomPos;
+
+    public void LeftTree()
+    {
+        foreach (Enemy enemy in _enemies)
+        {
+            enemy.QueueFree();
+            enemy.ClearEnemyBullets();
+        }
+    }
     public override void _Ready()
     {
         _initVars();
@@ -24,20 +33,16 @@ public class MainLevel : Node2D
         CheckForInput();
         ConfigSpawnTime();
         SetScore();
-        scoreBoard.Text =$"Score:{score}";
+        _scoreBoard.Text =$"Score:{_score}";
         SetDifficulty();
-        CheckLost();
     }
-
-    private void CheckLost()
+    public void CheckLost(Enemy collision)
     {
-        foreach(Enemy enemy in _enemies)
+        foreach (Enemy enemy in _enemies)
         {
-            if (enemy.ReachedEnd())
-            {
-                GetTree().ChangeSceneTo(youLostScene);
-            }
+            enemy.QueueFree();
         }
+        GetTree().ChangeSceneTo(_youLostScene);
     }
 
     private void SetScore()
@@ -60,33 +65,34 @@ public class MainLevel : Node2D
         _enemy = GD.Load<PackedScene>("res://Prefabs/Enemy.tscn");
         _timer = GetNode<Timer>("/root/MainLevel/EnemieSpawn/Timer");
         _enemies = new List<Enemy>();
-        score = 0;
-        scoreBoard = GetNode<RichTextLabel>("/root/MainLevel/Background/Label");
-        youLostScene = GD.Load<PackedScene>("res://Scenes_Levels/YouLostScreen.tscn");
-        randomPos = new Random();
+        _score = 0;
+        _scoreBoard = GetNode<RichTextLabel>("/root/MainLevel/Background/Label");
+        _youLostScene = GD.Load<PackedScene>("res://Scenes_Levels/YouLostScreen.tscn");
+        _randomPos = new Random();
     }
 
     public void IncreaseScore()
     {
-        score += 200;
+        _score += 200;
     }
 
     private void SetDifficulty()
     {
-        if(score >= 500)
+        if(_score >= 500)
         {
             for (int i = 0; i < _enemies.Count; i++)
-                _enemies[i].SetSpeed(500);
+                _enemies[i].SetSpeed(100) ;
         }
     }
     private void SpawnEnemies()
-    { 
+    {
         Enemy enemy = _enemy.Instance<Enemy>();
         this.GetTree().Root.AddChild(enemy);
-        enemy.Position = new Vector2(randomPos
+        enemy.Position = new Vector2(_randomPos
             .Next(0, (int)_enemySpawnPos.Position.x),
             _enemySpawnPos.Position.y);
         _enemies.Add(enemy);
+        
     }
 
     public void _on_Timer_timeout()

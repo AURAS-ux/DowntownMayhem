@@ -4,11 +4,11 @@
 [ext_resource path="res://Scripts/Bullet.cs" type="Script" id=2]
 
 [node name="Bullet" type="Area2D"]
-scale = Vector2( 0.45, 0.85 )
+scale = Vector2( 0.3, 0.85 )
 collision_layer = 8
-collision_mask = 2
+collision_mask = 34
 script = ExtResource( 2 )
-bulletSpeedMultiplyer = 100
+bulletSpeedMultiplyer = 200
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )

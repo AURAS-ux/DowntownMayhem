@@ -12,7 +12,7 @@ config_version=4
 
 config/name="Downtown Mayhem"
 run/main_scene="res://Scenes_Levels/MainLevel.tscn"
-config/icon="res://icon.png"
+config/icon="res://Assets/Icons/iconDM.png"
 
 [display]
 
@@ -24,6 +24,7 @@ window/stretch/aspect="keep"
 [global]
 
 2d=false
+phisycs=false
 
 [input]
 
@@ -63,6 +64,8 @@ Shoot={
 2d_physics/layer_2="Enemy "
 2d_physics/layer_3="Floor"
 2d_physics/layer_4="Bullet"
+2d_physics/layer_5="Enviroment"
+2d_physics/layer_6="EnemyBullet"
 
 [physics]
 

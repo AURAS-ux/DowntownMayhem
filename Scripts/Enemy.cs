@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using System.Collections.Generic;
 
 public class Enemy : KinematicBody2D
 {
@@ -7,16 +7,33 @@ public class Enemy : KinematicBody2D
     int direction;
     Vector2 currentPos;
     bool isHit;
+    bool allowShooting;
 
-    private PackedScene enemyBullet;
+    private PackedScene enemybullet;
     public override void _Ready()
     {
         direction = 1;
         currentPos = this.Position;
         isHit = false;
+        enemybullet = GD.Load<PackedScene>("res://Prefabs/EnemyBullet.tscn");
+        allowShooting = false;
     }
-  
+    
 
+    public void ClearEnemyBullets()
+    {
+        for(int i =1;i< GetParent().GetChildren().Count;i++)
+        {
+            this.GetParent().GetChild(i).QueueFree();
+        }
+    }
+    void EnemyShoot()
+    {
+        EnemyBullet bullet = enemybullet.Instance<EnemyBullet>();
+        this.GetParent().AddChild(bullet);
+        bullet.Position = new Vector2(this.GlobalPosition.x, this.GlobalPosition.y + 20.5f);
+    }
+    
     public void SetSpeed(int speed)
     {
         _speed = speed; 
@@ -29,11 +46,15 @@ public class Enemy : KinematicBody2D
     }
 
     public bool GetHitStatus() { return isHit; }
-    public void PrintHit() { GD.Print(this.isHit); }
+    public int GetSpeed()
+    {
+        return this._speed;
+    }
 
     public override void _PhysicsProcess(float delta)
     {
         MoveEnemy(delta);
+        //GD.Print(this.GetParent().GetChildren());
     }
 
     private void MoveEnemy(float delta)
@@ -41,25 +62,28 @@ public class Enemy : KinematicBody2D
         if (IsOnWall())
         {
             direction *= -1;
-            currentPos.y += 1000;
+            currentPos.y += 200;
             this.MoveAndSlide(new Vector2(0, currentPos.y), Vector2.Up);
         }
 
         this.MoveAndSlide(new Vector2(-100 * _speed * delta * direction, 0), Vector2.Up);
     }
 
-    public  bool ReachedEnd()
+  
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(float delta)
     {
-        if(this.Position.y >= 445)
+        if (allowShooting)
         {
-            return true;
+            EnemyShoot();
+            allowShooting = false;
         }
-        return false;
+
     }
 
-    //  // Called every frame. 'delta' is the elapsed time since the previous frame.
-    //  public override void _Process(float delta)
-    //  {
-    //      
-    //  }
+    public void _on_Timer_timeout()
+    {
+        allowShooting = true;
+    }
 }
